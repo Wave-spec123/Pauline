@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang=”en”>
+<head>
+  <meta charset=”UTF-8”>
+  <title>Valentine?</title>
+  <meta name=”viewport” content=”width=device-width, initial-scale=1.0”>
+
+  <style>
+    Body {
+      Font-family: Arial, sans-serif;
+      Background: #fff5f8;
+      Overflow: hidden;
+      Margin: 0;
+    }
+
+    .container {
+      Text-align: center;
+      Padding-top: 40px;
+    }
+
+    Img {
+      Width: 220px;
+    }
+
+    H2 {
+      Color: #e6005c;
+      Margin: 20px;
+    }
+
+    .buttons {
+      Position: relative;
+      Height: 200px;
+    }
+
+    Button {
+      Font-size: 18px;
+      Padding: 12px 25px;
+      Border: none;
+      Border-radius: 10px;
+      Cursor: pointer;
+      Position: absolute;
+    }
+
+    #yesBtn {
+      Background-color: #ff4d6d;
+      Color: white;
+      Left: 30%;
+      Top: 80px;
+      Transition: transform 0.3s ease;
+      z-index: 2;
+    }
+
+    #noBtn {
+      Background-color: #ccc;
+      Left: 55%;
+      Top: 80px;
+      z-index: 1;
+    }
+
+    /* Floating hearts */
+    .heart {
+      Position: fixed;
+      Bottom: -20px;
+      Font-size: 24px;
+      Animation: floatUp 4s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class=”container”>
+  <img src=https://i.imgur.com/4AiXzf8.png alt=”Minion holding heart”>
+  <h2>Will you be my Valentine? 💛</h2>
+
+  <div class=”buttons”>
+    <button id=”yesBtn”>Yes 💖</button>
+    <button id=”noBtn”>No 🙃</button>
+  </div>
+</div>
+
+<audio id=”minionSound”>
+  <source src=https://www.myinstants.com/media/sounds/minion-laugh.mp3>
+</audio>
+
+<script>
+  Const yesBtn = document.getElementById(“yesBtn”);
+  Const noBtn = document.getElementById(“noBtn”);
+  Const sound = document.getElementById(“minionSound”);
+
+  Let scale = 1;
+
+  // Overlap checker
+  Function isOverlapping(el1, el2) {
+    Const r1 = el1.getBoundingClientRect();
+    Const r2 = el2.getBoundingClientRect();
+
+    Return !(
+      R1.right < r2.left ||
+      R1.left > r2.right ||
+      R1.bottom < r2.top ||
+      R1.top > r2.bottom
+    );
+  }
+
+  // Make No button run away safely
+  Function moveNo() {
+    Sound.play();
+
+    // Grow YES
+    Scale += 0.2;
+    yesBtn.style.transform = `scale(${scale})`;
+
+    let x, y;
+    let tries = 0;
+
+    do {
+      x = Math.random() * (window.innerWidth – 120);
+      y = Math.random() * (window.innerHeight – 120);
+
+      noBtn.style.left = x + “px”;
+      noBtn.style.top = y + “px”;
+
+      tries++;
+    } while (isOverlapping(noBtn, yesBtn) && tries < 50);
+
+    // Fullscreen YES if they resist too long 😈
+    If (scale > 4) {
+      yesBtn.style.position = “fixed”;
+      yesBtn.style.inset = “0”;
+      yesBtn.style.transform = “none”;
+      yesBtn.style.width = “100vw”;
+      yesBtn.style.height = “100vh”;
+      yesBtn.style.fontSize = “50px”;
+      yesBtn.style.zIndex = “999”;
+    }
+  }
+
+  noBtn.addEventListener(“mouseover”, moveNo);
+  noBtn.addEventListener(“click”, moveNo);
+
+  // YES clicked
+  yesBtn.addEventListener(“click”, () => {
+    document.body.innerHTML = `
+      <div style=”
+        Display:flex;
+        Align-items:center;
+        Justify-content:center;
+        Height:100vh;
+        Background:#fff5f8;
+        Text-align:center;
+        Font-family:Arial;”>
+        <h1 style=”color:#e6005c;”>
+          YAYYYYY 💖💖💖<br>
+          Maatla Pauline Chominyana,<br>
+          You just made me the happiest person alive 🥹
+        </h1>
+      </div>
+    `;
+  });
+
+  // Floating hearts
+  setInterval(() => {
+    const heart = document.createElement(“div”);
+    heart.className = “heart”;
+    heart.innerHTML = “💖”;
+    heart.style.left = Math.random() * 100 + “vw”;
+    heart.style.animationDuration = (Math.random() * 2 + 3) + “s”;
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 4000);
+  }, 300);
+</script>
+
+</body>
+</html>
+
